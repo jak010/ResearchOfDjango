@@ -1,28 +1,28 @@
+import json
+
 from django.http import HttpResponse
 
 from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
-
-from ..serializer.MemberSerializer import AuthenticateSerializer
+from ..service.UserService import UserService
 
 
 class Register(APIView):
-    parser_classes = (JSONParser,)
 
-    def __init__(self):
-        super().__init__()
-
-        self.serializer = AuthenticateSerializer
-
-    def post(self, request, format=None):
+    def post(self, request):
         """ 유저 등록하기 """
-        serializer = self.serializer(data=request.data)
 
-        if serializer.is_valid():
-            create_user = serializer.create_user(request.data)
-            print(create_user)
+        service = UserService(data=request.data)
 
-        else:
-            return HttpResponse(400)
+        if service.is_valid():
+            service.register(validated_data=service.validated_data)
 
+        return HttpResponse(200)
+
+
+class MemberInfo(APIView):
+
+    def get(self, request):
+        """ 현재 유저 정보 보여주기 """
+        print(request.data)
         return HttpResponse(200)

@@ -10,20 +10,17 @@ from ..models import User
 from rest_framework import serializers
 
 
-class AuthenticateSerializer(serializers.ModelSerializer):
+class UserService(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['email', 'password']
 
-    def create_user(self, valid_data):
-        """
-         :param: valid_data -> email, password
-         is_valid()로 검증을 마치고 난 뒤에만 이 메소드를 호출해야함
-
-        """
-        if valid_data:
+    @staticmethod
+    def register(validated_data):
+        """ 유저 등록  """
+        if validated_data:
             user = User.objects.create_user(
-                email=valid_data.get("email"),
-                password=valid_data.get("password")
+                email=validated_data['email'],
+                password=validated_data['password']
             )
             return user
