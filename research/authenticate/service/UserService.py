@@ -16,11 +16,14 @@ class UserService(serializers.ModelSerializer):
         fields = ['email', 'password']
 
     @staticmethod
-    def register(validated_data):
+    def register(validated_data) -> bool:
         """ 유저 등록  """
+        print(validated_data)
         if validated_data:
             user = User.objects.create_user(
                 email=validated_data['email'],
                 password=validated_data['password']
             )
-            return user
+            return True
+        else:
+            return False

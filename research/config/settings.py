@@ -9,6 +9,10 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+import os
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from pathlib import Path
 
@@ -32,7 +36,6 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'authenticate',
     'rest_framework',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
