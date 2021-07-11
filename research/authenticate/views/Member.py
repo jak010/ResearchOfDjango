@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from library.response import response
 
 from rest_framework.views import APIView
 from ..service.UserService import UserService
@@ -8,18 +8,15 @@ class Register(APIView):
 
     def post(self, request):
         """ 유저 등록하기 """
-
         service = UserService(data=request.data)
 
-        if service.is_valid():
+        if service.is_valid(raise_exception=True):
             service.register(validated_data=service.validated_data)
 
-        return HttpResponse(200)
+        return response.Normal()
 
 
-class MemberInfo(APIView):
+class Users(APIView):
 
     def get(self, request):
-        """ 현재 유저 정보 보여주기 """
-        print(request.data)
-        return HttpResponse(200)
+        pass
