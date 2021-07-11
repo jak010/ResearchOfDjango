@@ -16,7 +16,12 @@ class Register(APIView):
         return response.Normal()
 
 
-class Users(APIView):
+class Member(APIView):
 
     def get(self, request):
-        pass
+        service = UserService()
+
+        if (data := service.read()) is not None:
+            return response.Normal(data=data)
+
+        return response.Normal()

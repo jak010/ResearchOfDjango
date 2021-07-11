@@ -5,6 +5,7 @@
     3. 비즈니스 로직이 시리얼라이저 말라고 다른 계층에 속하다면 어떤 방식으로 분류할 수 있을까?
 
 """
+from typing import List, Optional
 
 from ..models import User
 from rest_framework import serializers
@@ -14,6 +15,15 @@ class UserService(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['email', 'password']
+
+    @staticmethod
+    def read() -> Optional[List]:
+        """ 유저 목록 조회 """
+
+        # 불필요한 필드는 제거
+        users = User.objects.all().values('id', 'email', 'last_login')
+
+        return list(users)
 
     @staticmethod
     def register(validated_data) -> bool:
