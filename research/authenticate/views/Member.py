@@ -1,9 +1,6 @@
-import json
-
 from django.http import HttpResponse
 
 from rest_framework.views import APIView
-from rest_framework.parsers import JSONParser
 from ..service.UserService import UserService
 
 
