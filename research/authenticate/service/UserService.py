@@ -17,7 +17,7 @@ class UserService(serializers.ModelSerializer):
         fields = ['email', 'password']
 
     @staticmethod
-    def read() -> Optional[List]:
+    def get_users() -> Optional[List]:
         """ 유저 목록 조회 """
 
         # 불필요한 필드는 제거
@@ -33,6 +33,7 @@ class UserService(serializers.ModelSerializer):
                 email=validated_data['email'],
                 password=validated_data['password']
             )
-            return True
-        else:
-            return False
+            if user:
+                return True
+            else:
+                return False

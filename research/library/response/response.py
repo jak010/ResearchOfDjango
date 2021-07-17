@@ -1,29 +1,43 @@
-from django.http import HttpResponse
-from django.http import JsonResponse
+import json
+
+from django.http import HttpResponse, JsonResponse
+from django.core.serializers.json import DjangoJSONEncoder
 
 from rest_framework import status
 
+JSON_TYPE = "application/json"
 
-class Normal(JsonResponse):
-    def __init__(self, data=None):
-        self.response = {
-            'status': status.HTTP_200_OK,
-            'code': 20000
-        }
 
-        if data is not None:
-            self.response.update(data=data)
+def response_format(data, status, code):
+    response_data = {
+        'status': status,
+        'code': code,
+    }
 
-        super().__init__(
-            data=self.response,
+    if data is None:
+        response_data['data'] = "None"
+    else:
+        response_data['data'] = data
+
+    return json.dumps(obj=response_data, cls=DjangoJSONEncoder)
+
+
+class Normal(HttpResponse):
+    status_code = status.HTTP_200_OK
+
+    def __init__(self, data):
+        print(data)
+        super(Normal, self).__init__(
+            content=response_format(data=data, status=Normal.status_code, code=20000),
+            content_type=JSON_TYPE
         )
 
 
-class BadRequest(JsonResponse):
-    def __init__(self):
-        super().__init__(
-            data={
-                'status': status.HTTP_400_BAD_REQUEST,
-                'code': 40000,
-            },
+class BadRequest(HttpResponse):
+    status_code = status.HTTP_400_BAD_REQUEST
+
+    def __init__(self, data=None):
+        super(BadRequest, self).__init__(
+            content=response_format(data=data, status=BadRequest.status_code, code=40001),
+            content_type=JSON_TYPE
         )
