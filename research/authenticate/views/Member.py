@@ -19,6 +19,10 @@ class Register(APIView):
 class Member(APIView):
 
     def get(self, request):
+        """ 유저 목록 조회하기 """
+        if request is not None:
+            return response.BadRequest()
+
         user_service = UserService()
 
         if (users := user_service.get_users()) is not None:

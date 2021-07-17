@@ -11,11 +11,11 @@ from .views import (
 
 urlpatterns = [
 
-    # Member Register
-    url(r"^register$", Member.Register.as_view()),
-    url(r"^users$", Member.Member.as_view()),  # GET: 유저 목록 조회
-
-    url(r"^login$", TokenObtainPairView.as_view()),
+    #  Register
+    url(r"^login$", TokenObtainPairView.as_view()),  # POST: 토큰 발급하기
     url(r"^refresh", TokenRefreshView.as_view()),
+    url(r"^register$", Member.Register.as_view()),  # POST: 유저 등록하기
+
+    url(r"^users$", Member.Member.as_view()),  # GET: 유저 목록 조회
 
 ]
