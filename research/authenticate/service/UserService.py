@@ -18,11 +18,23 @@ class UserService(serializers.ModelSerializer):
 
     @staticmethod
     def get_users() -> Optional[List]:
-        """ 유저 목록 조회 """
+        """ 유저 목록 조회
 
+         :Return
+            {
+                "status": 200,
+                "code": 20000,
+                "data": [
+                    {
+                        "id": 1,
+                        "email": "bluetoon@naver.com",
+                        "last_login": null
+                    }
+                ]
+            }
+         """
         # 불필요한 필드는 제거
         users = User.objects.all().values('id', 'email', 'last_login')
-
         return list(users)
 
     @staticmethod
