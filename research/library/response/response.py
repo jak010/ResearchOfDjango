@@ -15,7 +15,7 @@ def response_format(data, status, code):
     }
 
     if data is None:
-        response_data['data'] = "None"
+        response_data['data'] = list()
     else:
         response_data['data'] = data
 
@@ -25,8 +25,7 @@ def response_format(data, status, code):
 class Normal(HttpResponse):
     status_code = status.HTTP_200_OK
 
-    def __init__(self, data):
-        print(data)
+    def __init__(self, data=None):
         super(Normal, self).__init__(
             content=response_format(data=data, status=Normal.status_code, code=20000),
             content_type=JSON_TYPE

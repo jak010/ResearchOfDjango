@@ -31,6 +31,10 @@ DEBUG = True
 AUTH_USER_MODEL = "authenticate.User"
 ALLOWED_HOSTS = ['*']
 
+# TIME ZONE
+TIME_ZONE = 'Asia/Seoul'
+USE_TZ = False
+
 # Application definition
 
 INSTALLED_APPS = [

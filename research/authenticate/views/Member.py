@@ -1,7 +1,14 @@
 from library.response import response
 
 from rest_framework.views import APIView
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 from ..service.UserService import UserService
+from ..service.UserService import UserLoginService
+
+
+class MemberLoginView(TokenObtainPairView):
+    serializer_class = UserLoginService
 
 
 class Register(APIView):

@@ -6,13 +6,13 @@ from rest_framework_simplejwt.views import (
 )
 
 from .views import (
-    Member
+    Member,
 )
 
 urlpatterns = [
 
     #  Register
-    url(r"^login$", TokenObtainPairView.as_view()),  # POST: 토큰 발급하기
+    url(r"^login$", Member.MemberLoginView.as_view()),  # POST: 토큰 발급하기
     url(r"^refresh", TokenRefreshView.as_view()),
     url(r"^register$", Member.Register.as_view()),  # POST: 유저 등록하기
 
