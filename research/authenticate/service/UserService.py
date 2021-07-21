@@ -47,7 +47,6 @@ class UserService(serializers.ModelSerializer):
     @staticmethod
     def get_users() -> Optional[List]:
         """ 유저 목록 조회
-
          :Return
             {
                 "status": 200,

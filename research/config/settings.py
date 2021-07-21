@@ -40,6 +40,7 @@ USE_TZ = False
 INSTALLED_APPS = [
     'authenticate',
     'rest_framework',
+    'drf_yasg',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
