@@ -2,6 +2,10 @@
 
 - Develop 에 관한 고찰
 
+## Current API
+   - `authenticate/login`
+     - jwt 토큰 발급용 api
+
 ## Settings
 
 - `DATABASE` 
@@ -41,7 +45,7 @@
 
 ## ToDo
 
-- CBV에서 메소드별 권한 관리가 되는지 조사
+- CBV에서 메소드별 권한 관리 방법 고찰
 
 ## Django Official Document Link
  - `import 순서에 관한 링크`
