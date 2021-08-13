@@ -1,11 +1,15 @@
-from django.db import models
+import jwt
+import datetime
 
+from django.db import models
+from config import settings
 from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin,
 )
 
 from .manager.UserManager import UserManager
+
 
 # Create your models here.
 
@@ -21,3 +25,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_user_email(self):
         return self.email
+
+    def get_user_token(self):
+        token = jwt.encode(
+            payload={
+                'email': self.get_user_email(),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=200)
+            },
+            key=settings.SECRET_KEY,
+            algorithm='HS256'
+        )
+        return token

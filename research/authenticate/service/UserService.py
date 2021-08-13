@@ -10,6 +10,8 @@ from pytz import timezone
 from typing import List, Optional
 
 from ..models import User
+from django.contrib.auth.hashers import check_password
+
 
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -44,6 +46,19 @@ class UserService(serializers.ModelSerializer):
         model = User
         fields = ['email', 'password']
 
+    # @staticmethod
+    # def get_user_token():
+    #     return User.get_user_token()
+    #
+
+    def user_chcker(self, data):
+        is_user = User.objects.get(email=data.get("email"))
+        print(data.get("password"))
+        print(is_user.password)
+        print(check_password(data.get('password'), is_user.password))
+
+
+
     @staticmethod
     def get_users() -> Optional[List]:
         """ 유저 목록 조회
@@ -63,6 +78,7 @@ class UserService(serializers.ModelSerializer):
         # 불필요한 필드는 제거
         users = User.objects.all().values('id', 'email', 'last_login')
         return list(users)
+
 
     @staticmethod
     def register(validated_data) -> bool:

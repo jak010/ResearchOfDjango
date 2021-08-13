@@ -4,7 +4,7 @@
 
 ## Settings
 
-- `DATABASE`
+- `DATABASE` 
     - `System`
         - `MySQL 5.7`
     - `config/settings.py`
@@ -22,6 +22,9 @@
     ```
 
 ## Topic
+- `[2021.08.13]`
+  - Project 생성 시에는 Project 이름을 config 로 줘서 환경설정에 관련된 디렉토리임을 명시적으로 둬야함
+  - jwt를 발급하고 API에 접근할 때 어떻게 오픈할 지 생각해보기
 - `[2021.07.19]`
   - JWT 를 쓰려면 Token Claims의 내용을 고려해보자
 - `[2021.07.18]`
@@ -39,3 +42,7 @@
 ## ToDo
 
 - CBV에서 메소드별 권한 관리가 되는지 조사
+
+## Django Official Document Link
+ - `import 순서에 관한 링크`
+   - https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/

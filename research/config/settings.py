@@ -40,7 +40,7 @@ USE_TZ = False
 INSTALLED_APPS = [
     'authenticate',
     'rest_framework',
-    'drf_yasg',
+    # 'drf_yasg',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'authenticate.middleware.Authentication.MyAuthentication'
 ]
 
 ROOT_URLCONF = 'config.urls'
