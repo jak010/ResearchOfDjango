@@ -9,36 +9,9 @@ import datetime
 from pytz import timezone
 from typing import List, Optional
 
-from django.contrib.auth import authenticate
-
 from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from ..models import User
-
-
-class UserLoginService(TokenObtainPairSerializer):
-
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-
-        token['email'] = user.email
-        return token
-
-    def validate(self, attrs):
-        token = super().validate(attrs)
-
-        token_pair = {}
-        for items in sorted(token.items()):
-            key, value = items[0], items[1]
-            token_pair[key] = value
-
-        self.user.last_login = datetime.datetime.now(
-            timezone('Asia/Seoul')).strftime('%Y-%m-%d %H:%M:%S')
-        self.user.save()
-
-        return token_pair
 
 
 class UserService(serializers.ModelSerializer):
@@ -46,38 +19,24 @@ class UserService(serializers.ModelSerializer):
         model = User
         fields = ['email', 'password']
 
-    def validate(self):
-
-        credential = {
-            'email': self.initial_data.get('email'),
-            'password': self.initial_data.get('password')
-        }
-
-        user = authenticate(**credential)
-
-        if user:
-            return user
-        else:
-            return False
+    # jwt를 직접 만들어서 사용하려면 아래와 같이
+    # def validate(self):
+    #
+    #     credential = {
+    #         'email': self.initial_data.get('email'),
+    #         'password': self.initial_data.get('password')
+    #     }
+    #
+    #     user = authenticate(**credential)
+    #
+    #     if user:
+    #         return user
+    #     else:
+    #         return False
 
     @staticmethod
     def get_users() -> Optional[List]:
-        """ 유저 목록 조회
-         :Return
-            {
-                "status": 200,
-                "code": 20000,
-                "data": [
-                    {
-                        "id": 1,
-                        "email": "bluetoon@naver.com",
-                        "last_login": null
-                    }
-                ]
-            }
-         """
-        # 불필요한 필드는 제거
-        users = User.objects.all().values('id', 'email', 'last_login')
+        users = User.objects.all().values('id', 'email', 'last_login')  # 불필요한 필드는 제거
         return list(users)
 
     @staticmethod

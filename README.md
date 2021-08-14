@@ -1,6 +1,9 @@
 ## Research Of Django
 
-- Develop 에 관한 고찰
+- DRF 에 관한 고찰
+
+## Policy
+  - 모든 API는 JWT를 발급받고 인증을 통해 접근해야 한다.
 
 ## Current API
    - `authenticate/login`

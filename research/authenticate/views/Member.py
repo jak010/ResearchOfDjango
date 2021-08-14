@@ -3,29 +3,30 @@ from library.response import response
 from rest_framework.views import APIView
 
 from ..service.UserService import UserService
-from ..service.UserService import UserLoginService
-from rest_framework.authentication import TokenAuthentication
+from ..service.AuthSerializer.jwtGenerateTokenSerializer import GenerateTokenSerializer
 
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 
 class MemberLoginView(TokenObtainPairView):
     # DRF를 이용해 token 을 발급하는 방법
-    serializer_class = UserLoginService
+    serializer_class = GenerateTokenSerializer
 
 
-class PublishToken(APIView):
-    # 커스텀 유저 모델을 이용해 토큰을 발급하는 방법
+# class PublishToken(APIView):
+# 커스텀 유저 모델을 이용해 토큰을 발급하는 방법
 
-    def post(self, request):
-        """ jwt 토큰 발급하기 """
-        service = UserService(data=request.data)
-
-        user = service.validate()
-
-        return response.Normal(data={
-            'Authorization': user.get_user_token()
-        })
+# def post(self, request):
+#     """ jwt 토큰 발급하기 """
+# service = UserService(data=request.data)
+#
+# user = service.validate()
+#
+# return response.Normal(data={
+#     'Authorization': user.get_user_token()
+# })
 
 
 class Register(APIView):
