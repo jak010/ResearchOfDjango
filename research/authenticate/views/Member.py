@@ -3,11 +3,15 @@ from library.response import response
 from rest_framework.views import APIView
 
 from ..service.UserService import UserService
+from ..service.UserService import UserLoginService
+from rest_framework.authentication import TokenAuthentication
+
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
-# class MemberLoginView(TokenObtainPairView):
-# DRF를 이용해 token 을 발급하는 방법
-#     serializer_class = UserLoginService
+class MemberLoginView(TokenObtainPairView):
+    # DRF를 이용해 token 을 발급하는 방법
+    serializer_class = UserLoginService
 
 
 class PublishToken(APIView):
@@ -20,7 +24,7 @@ class PublishToken(APIView):
         user = service.validate()
 
         return response.Normal(data={
-            'token': user.get_user_token().decode()
+            'Authorization': user.get_user_token()
         })
 
 

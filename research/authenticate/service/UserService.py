@@ -26,30 +26,25 @@ class UserLoginService(TokenObtainPairSerializer):
         token['email'] = user.email
         return token
 
-    # def validate(self, attrs):
-    #     token = super().validate(attrs)
-    #
-    #     token_pair = {}
-    #     for items in sorted(token.items()):
-    #         key, value = items[0], items[1]
-    #         token_pair[key] = value
-    #
-    #     self.user.last_login = datetime.datetime.now(
-    #         timezone('Asia/Seoul')).strftime('%Y-%m-%d %H:%M:%S')
-    #     self.user.save()
-    #
-    #     return token_pair
+    def validate(self, attrs):
+        token = super().validate(attrs)
+
+        token_pair = {}
+        for items in sorted(token.items()):
+            key, value = items[0], items[1]
+            token_pair[key] = value
+
+        self.user.last_login = datetime.datetime.now(
+            timezone('Asia/Seoul')).strftime('%Y-%m-%d %H:%M:%S')
+        self.user.save()
+
+        return token_pair
 
 
 class UserService(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['email', 'password']
-
-    # @staticmethod
-    # def get_user_token():
-    #     return User.get_user_token()
-    #
 
     def validate(self):
 
