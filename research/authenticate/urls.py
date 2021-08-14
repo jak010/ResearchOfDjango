@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import (
 
 from .views import (
     Member,
+    NewsFeed
 )
 
 urlpatterns = [
@@ -23,4 +24,7 @@ urlpatterns = [
     # API Practice
     url(r"^users$", Member.Member.as_view()),  # GET: 유저 목록 조회
 
+    url("^feed$", NewsFeed.Feed.as_view()),  # GET: 목록조회, POST: 피드생성
+
+    url("^feedview$", NewsFeed.FeedViewSet.as_view({'get': 'list'}))  # GET: 목록조회, POST: 피드생성
 ]

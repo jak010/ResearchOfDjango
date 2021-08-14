@@ -36,3 +36,13 @@ class User(AbstractBaseUser, PermissionsMixin):
             algorithm='HS256'
         )
         return token.decode()
+
+
+class Feed(models.Model):
+    id = models.BigAutoField(help_text='Feed ID', primary_key=True)
+    user_id = models.ForeignKey("User", on_delete=models.CASCADE, db_column='user_id')
+    title = models.TextField(help_text='Feed title', null=False)
+    content = models.TextField(help_text='Feed Content', blank=True, null=True)
+
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
