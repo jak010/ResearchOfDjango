@@ -7,7 +7,7 @@ from ..service.AuthSerializer.jwtGenerateTokenSerializer import GenerateTokenSer
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import AllowAny
 
 
 class MemberLoginView(TokenObtainPairView):
@@ -30,6 +30,7 @@ class MemberLoginView(TokenObtainPairView):
 
 
 class Register(APIView):
+    permission_classes = [AllowAny,]
 
     def post(self, request):
         """ 유저 등록하기 """

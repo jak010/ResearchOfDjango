@@ -1,6 +1,8 @@
 from ..models import Feed
 from rest_framework import serializers
 from rest_framework.fields import CurrentUserDefault
+from ..models import User
+from django.contrib.auth.models import AnonymousUser
 
 
 class FeedService(serializers.ModelSerializer):
@@ -23,10 +25,9 @@ class FeedService(serializers.ModelSerializer):
         return data
 
     def create(self):
-        self.validated_data.update(
-            {
-                'user_id': self.context.user
-            }
-        )
+        try:
+            self.validated_data.update({'user_id': self.context.user})
+        except AttributeError:
+            self.validated_data.update({'user_id': User(email="anonymous@anon.com")})
 
         return Feed.objects.create(**self.validated_data)

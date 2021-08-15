@@ -26,5 +26,9 @@ urlpatterns = [
 
     url("^feed$", NewsFeed.Feed.as_view()),  # GET: 목록조회, POST: 피드생성
 
-    url("^feedview$", NewsFeed.FeedViewSet.as_view({'get': 'list'}))  # GET: 목록조회, POST: 피드생성
+    url("^feedview$", NewsFeed.FeedViewSet.as_view({
+        'get': 'list',
+        'post': "create"
+    }))
+    # GET: 목록조회, POST: 피드생성
 ]
