@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -9,6 +9,11 @@ from .views import (
     Member,
     NewsFeed
 )
+
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter(trailing_slash=False)
+router.register(r'feedview', NewsFeed.FeedViewSet, basename='Feed')
 
 urlpatterns = [
 
@@ -24,11 +29,6 @@ urlpatterns = [
     # API Practice
     url(r"^users$", Member.Member.as_view()),  # GET: 유저 목록 조회
 
-    url("^feed$", NewsFeed.Feed.as_view()),  # GET: 목록조회, POST: 피드생성
-
-    url("^feedview$", NewsFeed.FeedViewSet.as_view({
-        'get': 'list',
-        'post': "create"
-    }))
-    # GET: 목록조회, POST: 피드생성
 ]
+
+urlpatterns += router.urls

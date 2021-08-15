@@ -14,6 +14,7 @@ class FeedService(serializers.ModelSerializer):
     def read(cls):
         data = [
             {
+                'id': item.id,
                 'user_pk': item.user_id.pk,
                 'title': item.title,
                 'content': item.content,
@@ -22,6 +23,23 @@ class FeedService(serializers.ModelSerializer):
 
             } for item in Feed.objects.all()
         ]
+        return data
+
+    @staticmethod
+    def retrieve(pk):
+
+        data = [
+            {
+                'id': item.id,
+                'user_pk': item.user_id.pk,
+                'title': item.title,
+                'content': item.content,
+                'create_at': item.create_at.strftime("%Y-%d-%m, %H:%M:%S"),
+                'update_at': item.update_at.strftime("%Y-%d-%m, %H:%M:%S")
+
+            } for item in Feed.objects.filter(id=int(pk))
+        ]
+
         return data
 
     def create(self):
