@@ -12,7 +12,6 @@ from ..models import Feed
 
 
 class FeedViewSet(viewsets.ModelViewSet):
-
     permission_classes_by_action = {
         'list': [permissions.AllowAny],
         'create': [permissions.AllowAny],
@@ -41,11 +40,14 @@ class FeedViewSet(viewsets.ModelViewSet):
             url_path="feed/(?P<user>[0-9]+)",
             )
     def feed(self, request, *args, **kwargs):
+        """
+        url path 변수를 두 개이상 사용할 때 본 action 데코레이터를 이용하자
+        """
         print(kwargs)
         print("Nested Url Setup")
         return response.Normal()
 
-    ## 메소드별 권한 관리를 위해 오버라이딩 함
+    # 메소드별 권한 관리를 위해 오버라이딩 함
     def get_permissions(self):
         try:
             # return permission_classes depending on `action`

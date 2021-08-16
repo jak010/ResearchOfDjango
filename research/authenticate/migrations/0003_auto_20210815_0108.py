@@ -17,12 +17,4 @@ class Migration(migrations.Migration):
             name='id',
             field=models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
         ),
-        migrations.CreateModel(
-            name='Feed',
-            fields=[
-                ('id', models.BigAutoField(help_text='Feed ID', primary_key=True, serialize=False)),
-                ('title', models.TextField(help_text='Feed title')),
-                ('content', models.TextField(blank=True, help_text='Feed Content', null=True)),
-            ],
-        ),
     ]

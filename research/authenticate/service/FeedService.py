@@ -39,7 +39,6 @@ class FeedService(serializers.ModelSerializer):
 
             } for item in Feed.objects.filter(id=int(pk))
         ]
-
         return data
 
     def create(self):
