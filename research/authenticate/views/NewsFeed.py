@@ -1,17 +1,22 @@
 from rest_framework import viewsets
-from library.response import response
-from ..service.FeedService import FeedService
-
 from rest_framework import permissions
-
 from rest_framework.decorators import action
-
-service = FeedService
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 from ..models import Feed
+from ..service.FeedService import FeedService
+from ..serializer.FeedSerializer import FeedSerializer
+
+from library.response import response
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK
+
+feed_service = FeedService(Feed)
 
 
 class FeedViewSet(viewsets.ModelViewSet):
+    serializer_class = FeedSerializer
+
     permission_classes_by_action = {
         'list': [permissions.AllowAny],
         'create': [permissions.AllowAny],
@@ -21,19 +26,26 @@ class FeedViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         """ 목록조회 """
-        return response.Normal(data=FeedService.read())
+        return Response(
+            status=HTTP_200_OK,
+            data=feed_service.read(query_param=request.query_params)
+        )
 
     def create(self, request, *args, **kwargs):
         """ 데이터 생성 """
-        feed_service = service(data=request.data, context=request)
-        if feed_service.is_valid(raise_exception=True):
-            feed_service.create()
-        return response.Normal()
+
+        feed_serializer = FeedSerializer(data=request.data)
+        if feed_serializer.is_valid(raise_exception=True):
+            data = feed_service.create(
+                valida_data=feed_serializer.validated_data,
+                session=request.user
+            )
+        return response.Normal(data)
 
     def retrieve(self, request, *args, **kwargs):
         """ 상세목록조회 """
-        print(kwargs)
-        return response.Normal(data=service.retrieve(kwargs['pk']))
+        query_result = feed_service.retrieve(path=kwargs)
+        return response.Normal(data=query_result)
 
     @action(detail=True,
             methods=['get'],

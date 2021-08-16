@@ -1,18 +1,25 @@
 from ..models import Feed
 from rest_framework import serializers
-from ..models import User
 
 
-class FeedService(serializers.ModelSerializer):
-    class Meta:
-        model = Feed
-        fields = ['title', 'content']
+class FeedService(object):
 
-    @classmethod
-    def read(cls):
-        query_result = Feed.objects.all()
+    def __init__(self, model):
+        self.model = model
+
+    def read(self, query_param):
+
+        # Parameter
+        sort = query_param.get('sort')
+
+        # query result set
+        query_result = self.model.objects.all()
+
+        if sort is not None:
+            query_result = query_result.order_by(sort)
 
         data = [
+            # Example. 데이터를 뽑아서 보여주기
             {
                 'id': query.id,
                 'user_id': query.user_id,
@@ -25,25 +32,33 @@ class FeedService(serializers.ModelSerializer):
         ]
         return data
 
-    @staticmethod
-    def retrieve(pk):
+    def retrieve(self, path):
+        user_pk = int(path.get('pk'))
+        query_result = self.model.objects.filter(user_id=user_pk)
 
         data = [
             {
-                'id': item.id,
-                'user_pk': item.user_id.pk,
-                'title': item.title,
-                'content': item.content,
-                'create_at': item.create_at.strftime("%Y-%d-%m, %H:%M:%S"),
-                'update_at': item.update_at.strftime("%Y-%d-%m, %H:%M:%S")
+                'id': query.id,
+                'user_pk': query.user_id,
+                'title': query.title,
+                'content': query.content,
+                'create_at': query.create_at.strftime("%Y-%d-%m, %H:%M:%S"),
+                'update_at': query.update_at.strftime("%Y-%d-%m, %H:%M:%S")
 
-            } for item in Feed.objects.filter(id=int(pk))
+            } for query in query_result
         ]
         return data
 
-    def create(self):
+    def create(self, valida_data, session):
+
         try:
-            self.validated_data.update({'user_id': self.context.user.id})
+            valida_data.update(
+                {'user_id': session.pk}
+            )
+
         except AttributeError:
-            self.validated_data.update({'user_id': 0})
-        return Feed.objects.create(**self.validated_data)
+            # Anonymous User
+            valida_data.update({'user_id': 0})
+        self.model.objects.create(**valida_data)
+
+        return valida_data
