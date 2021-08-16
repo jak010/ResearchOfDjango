@@ -23,7 +23,6 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(help_text='Feed ID', primary_key=True, serialize=False)),
                 ('title', models.TextField(help_text='Feed title')),
                 ('content', models.TextField(blank=True, help_text='Feed Content', null=True)),
-                ('user_id', models.ForeignKey(db_column='user_id', on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

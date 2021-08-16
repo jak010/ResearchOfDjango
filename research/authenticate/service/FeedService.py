@@ -1,8 +1,6 @@
 from ..models import Feed
 from rest_framework import serializers
-from rest_framework.fields import CurrentUserDefault
 from ..models import User
-from django.contrib.auth.models import AnonymousUser
 
 
 class FeedService(serializers.ModelSerializer):
@@ -12,16 +10,18 @@ class FeedService(serializers.ModelSerializer):
 
     @classmethod
     def read(cls):
+        query_result = Feed.objects.all()
+
         data = [
             {
-                'id': item.id,
-                'user_pk': item.user_id.pk,
-                'title': item.title,
-                'content': item.content,
-                'create_at': item.create_at.strftime("%Y-%d-%m, %H:%M:%S"),
-                'update_at': item.update_at.strftime("%Y-%d-%m, %H:%M:%S")
+                'id': query.id,
+                'user_pk': query.user_id.pk,
+                'title': query.title,
+                'content': query.content,
+                'create_at': query.create_at.strftime("%Y-%d-%m, %H:%M:%S"),
+                'update_at': query.update_at.strftime("%Y-%d-%m, %H:%M:%S")
 
-            } for item in Feed.objects.all()
+            } for query in query_result
         ]
         return data
 

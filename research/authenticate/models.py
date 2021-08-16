@@ -26,21 +26,22 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_user_email(self):
         return self.email
 
-    def get_user_token(self):
-        token = jwt.encode(
-            payload={
-                'email': self.get_user_email(),
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=15)
-            },
-            key=settings.SECRET_KEY,
-            algorithm='HS256'
-        )
-        return token.decode()
+    # DESC : AbstractBaseUser Model로 커스텀 jwt를 생성하려면 아래와 같이 21.08.16
+    # def get_user_token(self):
+    #     token = jwt.encode(
+    #         payload={
+    #             'email': self.get_user_email(),
+    #             'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=15)
+    #         },
+    #         key=settings.SECRET_KEY,
+    #         algorithm='HS256'
+    #     )
+    #     return token.decode()
 
 
 class Feed(models.Model):
     id = models.BigAutoField(help_text='Feed ID', primary_key=True)
-    user_id = models.ForeignKey("User", on_delete=models.CASCADE, db_column='user_id')
+    user_id = models.IntegerField(help_text="User Id")
     title = models.TextField(help_text='Feed title', null=False)
     content = models.TextField(help_text='Feed Content', blank=True, null=True)
 
