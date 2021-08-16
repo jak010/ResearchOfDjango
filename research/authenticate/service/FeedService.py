@@ -15,7 +15,7 @@ class FeedService(serializers.ModelSerializer):
         data = [
             {
                 'id': query.id,
-                'user_pk': query.user_id.pk,
+                'user_id': query.user_id,
                 'title': query.title,
                 'content': query.content,
                 'create_at': query.create_at.strftime("%Y-%d-%m, %H:%M:%S"),
@@ -44,8 +44,7 @@ class FeedService(serializers.ModelSerializer):
 
     def create(self):
         try:
-            self.validated_data.update({'user_id': self.context.user})
+            self.validated_data.update({'user_id': self.context.user.id})
         except AttributeError:
-            self.validated_data.update({'user_id': User(email="anonymous@anon.com")})
-
+            self.validated_data.update({'user_id': 0})
         return Feed.objects.create(**self.validated_data)
