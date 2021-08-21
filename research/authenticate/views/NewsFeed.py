@@ -25,14 +25,18 @@ class FeedViewSet(viewsets.ModelViewSet):
     }
 
     def list(self, request, *args, **kwargs):
-        """ 목록조회 """
+        """ GET, 목록조회
+
+         TODO: 페이지네이션, 정렬키 적용
+
+         """
         return Response(
             status=HTTP_200_OK,
             data=feed_service.read(query_param=request.query_params)
         )
 
     def create(self, request, *args, **kwargs):
-        """ 데이터 생성 """
+        """ POST, 데이터 생성 """
 
         feed_serializer = FeedSerializer(data=request.data)
         if feed_serializer.is_valid(raise_exception=True):

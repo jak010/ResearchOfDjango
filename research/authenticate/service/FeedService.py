@@ -1,5 +1,10 @@
-from ..models import Feed
-from rest_framework import serializers
+from dataclasses import dataclass, asdict
+
+
+@dataclass
+class FeedData:
+    title: str = None
+    content: str = None
 
 
 class FeedService(object):
@@ -7,16 +12,20 @@ class FeedService(object):
     def __init__(self, model):
         self.model = model
 
+        # query result set
+        self.query_result = self.model.objects.all()
+
     def read(self, query_param):
 
-        # Parameter
-        sort = query_param.get('sort')
+        # Data Initialize
+        FeedDTO = FeedData(
+            title=query_param.get('title'),
+            content=query_param.get('content'),
+        )
 
-        # query result set
-        query_result = self.model.objects.all()
-
-        if sort is not None:
-            query_result = query_result.order_by(sort)
+        query_result = self.query_result.filter(
+            **self.filter_kwargs(FeedDTO),
+        ).order_by('id')
 
         data = [
             # Example. 데이터를 뽑아서 보여주기
@@ -30,6 +39,7 @@ class FeedService(object):
 
             } for query in query_result
         ]
+
         return data
 
     def retrieve(self, path):
@@ -62,3 +72,15 @@ class FeedService(object):
         self.model.objects.create(**valida_data)
 
         return valida_data
+
+    """ Method Notes
+    01. filter_kwargs : query string to orm dict 
+    
+    """
+
+    def filter_kwargs(self, feed_dto):
+        filter_kwargs = {}
+        for k, v in asdict(feed_dto).items():
+            if v is not None:
+                filter_kwargs.update({k: v})
+        return filter_kwargs

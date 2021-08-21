@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'authenticate',
     'rest_framework',
     'drf_yasg',
+    'django_filters',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -140,10 +141,10 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 
-    'DEFAULT_FILTER_BACKENDS': (
-        'rest_framework.filters.OrderingFilter',
-        'rest_framework.filters.SearchFilter',
-    )
+    # 'DEFAULT_FILTER_BACKENDS': (
+    #     'rest_framework.filters.OrderingFilter',
+    #     'rest_framework.filters.SearchFilter',
+    # )
 
 }
 
