@@ -8,8 +8,11 @@ from ..service.FeedService import FeedService
 from ..serializer.FeedSerializer import FeedSerializer
 
 from library.response import response
+
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK
+from rest_framework import status
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 feed_service = FeedService(Feed)
 
@@ -24,6 +27,9 @@ class FeedViewSet(viewsets.ModelViewSet):
         'feed': [permissions.AllowAny]
     }
 
+    filter_backends = [DjangoFilterBackend]
+    filter_fields = ['title', 'content']
+
     def list(self, request, *args, **kwargs):
         """ GET, 목록조회
 
@@ -31,8 +37,9 @@ class FeedViewSet(viewsets.ModelViewSet):
 
          """
         return Response(
-            status=HTTP_200_OK,
-            data=feed_service.read(query_param=request.query_params)
+            status=status.HTTP_200_OK,
+            data=feed_service.read(query_param=request.query_params),
+            content_type='application/json'
         )
 
     def create(self, request, *args, **kwargs):

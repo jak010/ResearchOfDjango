@@ -1,5 +1,10 @@
 from dataclasses import dataclass, asdict
 
+from ..serializer.FeedSerializer import (
+    FeedSerializer,
+    FeedListSerializer
+)
+
 
 @dataclass
 class FeedData:
@@ -16,31 +21,35 @@ class FeedService(object):
         self.query_result = self.model.objects.all()
 
     def read(self, query_param):
+        """ 목록조회 서비스 """
 
-        # Data Initialize
-        FeedDTO = FeedData(
+        items = dict(query_param)
+
+        # Data initialized
+        feed_dto = FeedData(
             title=query_param.get('title'),
             content=query_param.get('content'),
         )
 
-        query_result = self.query_result.filter(
-            **self.filter_kwargs(FeedDTO),
-        ).order_by('id')
+        sort = query_param.get('sort') if query_param.get('sort') else '-id'  # sort default key is pk
 
-        data = [
-            # Example. 데이터를 뽑아서 보여주기
-            {
-                'id': query.id,
-                'user_id': query.user_id,
-                'title': query.title,
-                'content': query.content,
-                'create_at': query.create_at.strftime("%Y-%d-%m, %H:%M:%S"),
-                'update_at': query.update_at.strftime("%Y-%d-%m, %H:%M:%S")
+        if not items.keys():
+            # query_param이 없으면 전체 목록조회
+            serializers = FeedListSerializer(
+                self.model.objects.all(),
+                many=True
+            )
+            return serializers.data
 
-            } for query in query_result
-        ]
+        # 필터링
+        serializers = FeedListSerializer(
+            self.model.objects.all().filter(
+                **self.filter_kwargs(feed_dto)
+            ).order_by(sort),
+            many=True
+        )
 
-        return data
+        return serializers.data
 
     def retrieve(self, path):
         user_pk = int(path.get('pk'))
